@@ -14,7 +14,18 @@ def run_command(command: list[str]) -> None:
 
 
 def check_docs() -> None:
-    required = ["README.md", "RUNBOOK.md", "MODELS.md", ".env.example"]
+    required = [
+        "README.md",
+        "RUNBOOK.md",
+        "MODELS.md",
+        "DEPLOYMENT.md",
+        ".env.example",
+        "Dockerfile",
+        ".dockerignore",
+        "scripts/benchmark.py",
+        "scripts/benchmark_live.py",
+        "scripts/live_validate.py",
+    ]
     missing = [name for name in required if not (ROOT / name).exists()]
     if missing:
         raise SystemExit(f"FAIL: docs check missing {', '.join(missing)}")

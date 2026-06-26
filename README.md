@@ -208,6 +208,29 @@ python scripts/preflight_check.py
 
 This runs schema tests, public sample tests, hidden-style tests, safety tests, the benchmark, documentation checks, sample-output checks, and an obvious-secret scan.
 
+## Deployment Readiness
+
+Production-compatible local start command:
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+Recommended deployment start command:
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
+
+See `DEPLOYMENT.md` for platform notes, health checks, sample POST commands, and troubleshooting.
+
+After deployment, validate the live URL with:
+
+```bash
+python scripts/live_validate.py --base-url https://YOUR-LIVE-URL
+python scripts/benchmark_live.py --base-url https://YOUR-LIVE-URL
+```
+
 ## Docker Fallback
 
 Build:
@@ -288,6 +311,7 @@ SUST_Preli_Sample_Cases.json
 - No real payment API integration is included.
 - No real customer data is included, and no secrets are required.
 - Deployment has not been performed in Phase 3.
+- Phase 4 prepares deployment validation tools but does not deploy without platform access.
 
 ## Team Role Table
 
