@@ -1,0 +1,17 @@
+{
+  "ticket_id": "TKT-008",
+  "relevant_transaction_id": null,
+  "evidence_verdict": "insufficient_data",
+  "case_type": "wrong_transfer",
+  "severity": "medium",
+  "department": "dispute_resolution",
+  "agent_summary": "Customer reports a possible wrong transfer for the reported amount via the reported transaction. Evidence verdict is insufficient_data. We will contact you through official support channels.",
+  "recommended_next_action": "Verify the reported transaction details with the customer before starting or continuing the wrong-transfer dispute workflow. We will contact you through official support channels.",
+  "customer_reply": "We have noted your concern about transaction the reported transaction. Our dispute team will review the case and contact you through official support channels. Please do not share your PIN or OTP with anyone.",
+  "human_review_required": false,
+  "confidence": 0.65,
+  "reason_codes": [
+    "wrong_transfer",
+    "needs_clarification"
+  ]
+}

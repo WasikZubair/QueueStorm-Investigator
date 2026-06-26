@@ -1,0 +1,17 @@
+{
+  "ticket_id": "TKT-004",
+  "relevant_transaction_id": "TXN-9401",
+  "evidence_verdict": "consistent",
+  "case_type": "refund_request",
+  "severity": "low",
+  "department": "customer_support",
+  "agent_summary": "Customer requests a refund for 500 BDT via TXN-9401. We will contact you through official support channels.",
+  "recommended_next_action": "Explain that refund eligibility depends on policy or merchant confirmation and guide the customer through official support. We will contact you through official support channels.",
+  "customer_reply": "Thank you for reaching out. Refund eligibility depends on the applicable policy or merchant confirmation. Our team can guide you through the official process. We will contact you through official support channels. Please do not share your PIN or OTP with anyone.",
+  "human_review_required": false,
+  "confidence": 0.9,
+  "reason_codes": [
+    "refund_request",
+    "transaction_match"
+  ]
+}

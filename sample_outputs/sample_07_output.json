@@ -1,0 +1,17 @@
+{
+  "ticket_id": "TKT-007",
+  "relevant_transaction_id": "TXN-9701",
+  "evidence_verdict": "consistent",
+  "case_type": "agent_cash_in_issue",
+  "severity": "high",
+  "department": "agent_operations",
+  "agent_summary": "Customer reports cash-in not reflected for 2000 BDT via TXN-9701.",
+  "recommended_next_action": "Investigate TXN-9701 pending cash-in status with agent_operations.",
+  "customer_reply": "আপনার লেনদেন TXN-9701 এর বিষয়টি আমরা পেয়েছি। আমাদের এজেন্ট অপারেশনস দল এটি যাচাই করবে এবং অফিসিয়াল চ্যানেলে জানাবে। অনুগ্রহ করে কারো সাথে আপনার PIN বা OTP শেয়ার করবেন না।",
+  "human_review_required": true,
+  "confidence": 0.9,
+  "reason_codes": [
+    "agent_cash_in_issue",
+    "transaction_match"
+  ]
+}

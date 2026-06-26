@@ -1,0 +1,17 @@
+{
+  "ticket_id": "TKT-006",
+  "relevant_transaction_id": null,
+  "evidence_verdict": "insufficient_data",
+  "case_type": "other",
+  "severity": "low",
+  "department": "customer_support",
+  "agent_summary": "Customer provided a general or unclear support complaint with insufficient detail for a specific case type. We will contact you through official support channels.",
+  "recommended_next_action": "Ask for transaction ID, amount, approximate time, and a short description of what went wrong. We will contact you through official support channels.",
+  "customer_reply": "Thank you for reaching out. Please share the transaction ID, amount, approximate time, and what went wrong so we can help through official support channels. Please do not share your PIN or OTP with anyone.",
+  "human_review_required": false,
+  "confidence": 0.65,
+  "reason_codes": [
+    "other",
+    "needs_clarification"
+  ]
+}

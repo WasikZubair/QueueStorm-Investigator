@@ -1,20 +1,34 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 
-from app.reasoning import investigate_events
-from app.safety import get_safety_note
-from app.schemas import InvestigationRequest, InvestigationResponse
+from app.reasoning import analyze_ticket
+from app.schemas import AnalyzeTicketRequest, AnalyzeTicketResponse
 
 
 app = FastAPI(
     title="QueueStorm Investigator API",
-    description="Preliminary queue and transaction event log investigation API.",
-    version="0.1.0",
+    description="Fintech SupportOps copilot API for complaint and transaction evidence review.",
+    version="0.2.0",
 )
 
 
-@app.get("/")
-def root() -> dict[str, str]:
-    return {"message": "QueueStorm Investigator API"}
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(
+    request: Request, exc: RequestValidationError
+) -> JSONResponse:
+    return JSONResponse(
+        status_code=422,
+        content={"detail": "Invalid request body. Check required fields and enum values."},
+    )
+
+
+@app.exception_handler(Exception)
+async def generic_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal error while analyzing ticket."},
+    )
 
 
 @app.get("/health")
@@ -22,18 +36,6 @@ def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.post("/investigate", response_model=InvestigationResponse)
-def investigate(request: InvestigationRequest) -> InvestigationResponse:
-    classification, verdict, confidence, matched_transactions, evidence = investigate_events(
-        request.events
-    )
-
-    return InvestigationResponse(
-        case_id=request.case_id,
-        classification=classification,
-        verdict=verdict,
-        confidence=confidence,
-        matched_transactions=matched_transactions,
-        evidence=evidence,
-        safety_note=get_safety_note(),
-    )
+@app.post("/analyze-ticket", response_model=AnalyzeTicketResponse)
+def analyze_ticket_route(request: AnalyzeTicketRequest) -> AnalyzeTicketResponse:
+    return analyze_ticket(request)

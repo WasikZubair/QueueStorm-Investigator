@@ -1,0 +1,18 @@
+{
+  "ticket_id": "TKT-002",
+  "relevant_transaction_id": "TXN-9202",
+  "evidence_verdict": "inconsistent",
+  "case_type": "wrong_transfer",
+  "severity": "medium",
+  "department": "dispute_resolution",
+  "agent_summary": "Customer reports a possible wrong transfer for 2000 BDT via TXN-9202 with +8801812345678. Evidence verdict is inconsistent. We will contact you through official support channels.",
+  "recommended_next_action": "Verify TXN-9202 details with the customer before starting or continuing the wrong-transfer dispute workflow. We will contact you through official support channels.",
+  "customer_reply": "We have noted your concern about transaction TXN-9202. Our dispute team will review the case and contact you through official support channels. Please do not share your PIN or OTP with anyone.",
+  "human_review_required": true,
+  "confidence": 0.75,
+  "reason_codes": [
+    "wrong_transfer",
+    "established_recipient_pattern",
+    "evidence_inconsistent"
+  ]
+}
