@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import re
-from collections import Counter
 from datetime import datetime
 
 from app.safety import sanitize_response_texts
@@ -111,7 +110,7 @@ def _contains_any(text: str, keywords: tuple[str, ...]) -> bool:
 
 def _extract_amounts(text: str) -> list[float]:
     amounts = []
-    for match in re.finditer(r"(?<![\d+])\d{2,7}(?:\.\d+)?(?!\d)", text):
+    for match in re.finditer(r"(?<![\w+-])\d{2,7}(?:\.\d+)?(?![\w-])", text):
         value = match.group(0)
         if value.startswith("880") or value.startswith("01"):
             continue
@@ -126,13 +125,13 @@ def _classify_case(text: str, request: AnalyzeTicketRequest) -> str:
         return "duplicate_payment"
     if _contains_any(text, ("agent cash in", "cash in", "cash-in", "balance not added", "agent", "এজেন্ট", "ক্যাশ ইন", "ব্যালেন্সে টাকা আসেনি")):
         return "agent_cash_in_issue"
-    if _contains_any(text, ("failed", "deducted", "balance deducted", "app showed failed", "কেটে", "কেটে গেছে", "failed hoyeche", "fail hoise")):
+    if _contains_any(text, ("failed", "deducted", "balance deducted", "app showed failed", "কেটে", "কেটে গেছে", "failed hoyeche", "fail hoise", "fail korse", "payment fail")):
         return "payment_failed"
     if _contains_any(text, ("refund", "return money", "changed my mind", "ফেরত")):
         return "refund_request"
     if _contains_any(text, ("merchant settlement", "sales not settled", "settlement", "settled to my account")) or request.user_type == "merchant":
         return "merchant_settlement_delay"
-    if _contains_any(text, ("wrong number", "wrong person", "sent by mistake", "wrong recipient", "reverse it", "brother", "didn't get it", "did not get it", "ভুল নম্বর", "ভুল নাম্বার", "ভুল করে")):
+    if _contains_any(text, ("wrong number", "wrong person", "sent by mistake", "wrong recipient", "reverse it", "brother", "didn't get it", "did not get it", "bhul number", "bhul namber", "vul number", "wrong transfer", "ভুল নম্বর", "ভুল নাম্বার", "ভুল করে")):
         return "wrong_transfer"
     return "other"
 

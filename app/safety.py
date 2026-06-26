@@ -4,14 +4,20 @@ import re
 SENSITIVE_TERMS = ("PIN", "OTP", "password", "full card number")
 
 UNSAFE_PATTERNS = [
-    r"\b(send|share|provide)\s+(your\s+)?(otp|pin|password)\b",
+    r"\b(send|share|provide|give)\s+(your\s+)?(otp|pin|password)\b",
     r"\bfull\s+card\s+number\b",
     r"\bwe\s+will\s+refund\b",
+    r"\bwe'll\s+refund\b",
     r"\brefund\s+confirmed\b",
+    r"\brefund\s+is\s+confirmed\b",
     r"\breversal\s+confirmed\b",
+    r"\breversal\s+is\s+confirmed\b",
     r"\baccount\s+unblocked\b",
+    r"\baccount\s+unblock\s+confirmed\b",
     r"\bmoney\s+recovered\b",
     r"\bcontact\s+this\s+personal\s+number\b",
+    r"\bcontact\s+this\s+number\b",
+    r"\bcall\s+this\s+personal\s+number\b",
 ]
 
 

@@ -1,6 +1,6 @@
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr, field_validator
 
 
 Language = Literal["en", "bn", "mixed"]
@@ -33,19 +33,19 @@ Department = Literal[
 class Transaction(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
-    transaction_id: str | None = None
-    timestamp: str | None = None
+    transaction_id: StrictStr | None = None
+    timestamp: StrictStr | None = None
     type: TransactionType | None = None
-    amount: float | None = None
-    counterparty: str | None = None
+    amount: StrictInt | StrictFloat | None = None
+    counterparty: StrictStr | None = None
     status: TransactionStatus | None = None
 
 
 class AnalyzeTicketRequest(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
-    ticket_id: str
-    complaint: str
+    ticket_id: StrictStr
+    complaint: StrictStr
     language: Language | None = None
     channel: Channel | None = None
     user_type: UserType | None = "unknown"

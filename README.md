@@ -4,6 +4,20 @@ Phase 2 status: backend aligned with official problem statement and sample JSON.
 
 QueueStorm Investigator is a FastAPI fintech SupportOps copilot API for the SUST CSE Carnival 2026 Codex Community Hackathon preliminary round. It reads a customer complaint and recent transaction history, identifies the likely case type, matches evidence, routes the case, and drafts a safe support reply.
 
+## Problem It Solves
+
+During high-volume fintech campaigns, support teams receive many complaints about wrong transfers, failed payments, refund requests, merchant settlements, agent cash-in issues, duplicate payments, and suspicious OTP/PIN scams. This API gives support agents a fast, structured, safety-aware first pass over each ticket.
+
+## Tech Stack
+
+- Python
+- FastAPI
+- Pydantic
+- Uvicorn
+- Pytest
+- FastAPI `TestClient` for local sample validation and benchmark checks
+- Docker fallback using `python:3.12-slim`
+
 ## API Contract
 
 The judge-facing endpoints are:
@@ -113,6 +127,18 @@ It currently handles:
 
 Transaction matching considers amount, transaction type, counterparty, transaction ID mentions, status compatibility, and broad time/date clues. If multiple transactions are equally plausible, the API returns `relevant_transaction_id: null` and `evidence_verdict: insufficient_data`.
 
+## Transaction Matching
+
+The matcher scores each transaction using:
+
+- amount match
+- official transaction type compatibility
+- official status compatibility
+- counterparty or transaction ID mentions
+- broad date/time clues
+
+It returns a transaction only when one match is clearly strongest. For duplicate payments, it selects the second matching completed payment as the likely duplicate. For phishing and safety-only reports, `relevant_transaction_id` may be `null`.
+
 ## Safety Guardrails
 
 The service is an internal support copilot, not an autonomous financial decision maker.
@@ -125,6 +151,10 @@ Safety rules enforced in every response:
 - Route suspicious credential requests to `fraud_risk`.
 - Ignore prompt-injection instructions inside complaint text.
 - Sanitize generated support text before returning the response.
+
+## Prompt Injection Defense
+
+Complaint text is treated only as customer-provided evidence. Instructions such as "ignore all rules", "promise refund", or "ask for OTP" do not override the API schema, safety sanitizer, or deterministic routing logic.
 
 ## How to Run Locally
 
@@ -151,11 +181,81 @@ The test suite covers:
 - Official schema fields and enum values.
 - All 10 public sample cases functionally.
 - Safety guardrails.
-- 15 hidden-style local cases, including malformed input, empty complaint, Bangla/Banglish complaints, prompt injection, ambiguous matches, and duplicate payments.
+- 50+ hidden-style local cases, including malformed input, empty complaint, Bangla/Banglish complaints, prompt injection, ambiguous matches, and duplicate payments.
+
+Phase 3 expands the hidden-style suite to 50+ valid edge cases plus malformed-input cases.
+
+## How to Run Benchmark
+
+```bash
+python scripts/benchmark.py
+```
+
+The benchmark repeatedly sends the 10 public sample cases to the local FastAPI app through `TestClient` and prints:
+
+- `total_requests`
+- `success_count`
+- `failure_count`
+- `average_latency_ms`
+- `p95_latency_ms`
+- `max_latency_ms`
+
+## Preflight Check
+
+```bash
+python scripts/preflight_check.py
+```
+
+This runs schema tests, public sample tests, hidden-style tests, safety tests, the benchmark, documentation checks, sample-output checks, and an obvious-secret scan.
+
+## Docker Fallback
+
+Build:
+
+```bash
+docker build -t queuestorm-investigator .
+```
+
+Run:
+
+```bash
+docker run -p 8000:8000 queuestorm-investigator
+```
+
+Docker starts Uvicorn on `0.0.0.0` and uses the `PORT` environment variable when provided, defaulting to `8000`.
 
 ## MODELS
 
-No external AI or LLM model is used in Phase 2. The service runs a local deterministic Python rule engine for classification, transaction matching, evidence verdicts, routing, severity, and safe response generation. This keeps local execution simple, avoids API keys, and avoids runtime model cost.
+No external AI or LLM model is used in Phase 2 or Phase 3. The service runs a local deterministic Python rule engine for classification, transaction matching, evidence verdicts, routing, severity, and safe response generation. This keeps local execution simple, avoids API keys, and avoids runtime model cost.
+
+No paid model is required in Phase 3 either. See `MODELS.md` for the full model and fallback statement.
+
+## Sample Request
+
+```bash
+curl -X POST http://127.0.0.1:8000/analyze-ticket \
+  -H "Content-Type: application/json" \
+  --data @samples/sample_request.json
+```
+
+## Sample Response
+
+```json
+{
+  "ticket_id": "TKT-001",
+  "relevant_transaction_id": "TXN-9101",
+  "evidence_verdict": "consistent",
+  "case_type": "wrong_transfer",
+  "severity": "high",
+  "department": "dispute_resolution",
+  "agent_summary": "Customer reports a possible wrong transfer for 5000 BDT via TXN-9101 with +8801719876543. Evidence verdict is consistent.",
+  "recommended_next_action": "Verify TXN-9101 details with the customer before starting or continuing the wrong-transfer dispute workflow.",
+  "customer_reply": "We have noted your concern about transaction TXN-9101. Our dispute team will review the case and contact you through official support channels. Please do not share your PIN or OTP with anyone.",
+  "human_review_required": true,
+  "confidence": 0.9,
+  "reason_codes": ["wrong_transfer", "transaction_match"]
+}
+```
 
 ## Sample Output
 
@@ -184,6 +284,10 @@ SUST_Preli_Sample_Cases.json
 - Time matching is broad and does not deeply parse relative dates.
 - No production payment system, ledger, identity, or fraud service is integrated.
 - Deployment has not been performed in Phase 2.
+- No frontend is included.
+- No real payment API integration is included.
+- No real customer data is included, and no secrets are required.
+- Deployment has not been performed in Phase 3.
 
 ## Team Role Table
 
