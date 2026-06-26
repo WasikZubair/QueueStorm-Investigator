@@ -119,9 +119,9 @@ def _extract_amounts(text: str) -> list[float]:
 
 
 def _classify_case(text: str, request: AnalyzeTicketRequest) -> str:
-    if _contains_any(text, ("otp", "pin", "password", "suspicious call", "blocked if", "block threat", "scam", "fraud", "ওটিপি", "পিন", "পাসওয়ার্ড")):
+    if _contains_any(text, ("otp", "pin", "password", "suspicious call", "suspicious sms", "sms link", "blocked if", "block threat", "scam", "fraud", "ওটিপি", "পিন", "পাসওয়ার্ড")):
         return "phishing_or_social_engineering"
-    if _contains_any(text, ("deducted twice", "paid twice", "double charge", "twice", "duplicate", "দুইবার", "ডাবল")):
+    if _contains_any(text, ("deducted twice", "paid twice", "double charge", "twice", "duplicate", "duibar", "দুইবার", "ডাবল")):
         return "duplicate_payment"
     if _contains_any(text, ("agent cash in", "cash in", "cash-in", "balance not added", "agent", "এজেন্ট", "ক্যাশ ইন", "ব্যালেন্সে টাকা আসেনি")):
         return "agent_cash_in_issue"
@@ -129,7 +129,7 @@ def _classify_case(text: str, request: AnalyzeTicketRequest) -> str:
         return "payment_failed"
     if _contains_any(text, ("refund", "return money", "changed my mind", "ফেরত")):
         return "refund_request"
-    if _contains_any(text, ("merchant settlement", "sales not settled", "settlement", "settled to my account")) or request.user_type == "merchant":
+    if _contains_any(text, ("merchant settlement", "sales not settled", "settlement", "settled to my account", "মার্চেন্ট সেটেলমেন্ট", "সেটেলমেন্ট আসেনি")) or request.user_type == "merchant":
         return "merchant_settlement_delay"
     if _contains_any(text, ("wrong number", "wrong person", "sent by mistake", "wrong recipient", "reverse it", "brother", "didn't get it", "did not get it", "bhul number", "bhul namber", "vul number", "wrong transfer", "ভুল নম্বর", "ভুল নাম্বার", "ভুল করে")):
         return "wrong_transfer"
