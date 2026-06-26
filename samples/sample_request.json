@@ -1,0 +1,59 @@
+{
+  "case_id": "case-queue-storm-001",
+  "events": [
+    {
+      "event_id": "evt-001",
+      "timestamp": "2026-06-26T14:01:05Z",
+      "type": "payment_attempt",
+      "actor": "payment-worker-7",
+      "queue": "payments.settlement",
+      "transaction_id": "txn-88421",
+      "amount": 149.99,
+      "status": "failed",
+      "metadata": {
+        "error_code": "UPSTREAM_TIMEOUT",
+        "attempt": 1
+      }
+    },
+    {
+      "event_id": "evt-002",
+      "timestamp": "2026-06-26T14:01:20Z",
+      "type": "retry",
+      "actor": "retry-worker-2",
+      "queue": "payments.settlement",
+      "transaction_id": "txn-88421",
+      "amount": 149.99,
+      "status": "retry",
+      "metadata": {
+        "attempt": 2
+      }
+    },
+    {
+      "event_id": "evt-003",
+      "timestamp": "2026-06-26T14:01:45Z",
+      "type": "retry",
+      "actor": "retry-worker-2",
+      "queue": "payments.settlement",
+      "transaction_id": "txn-88421",
+      "amount": 149.99,
+      "status": "retry",
+      "metadata": {
+        "attempt": 3
+      }
+    },
+    {
+      "event_id": "evt-004",
+      "timestamp": "2026-06-26T14:02:03Z",
+      "type": "payment_settled",
+      "actor": "payment-worker-7",
+      "queue": "payments.settlement",
+      "transaction_id": "txn-88421",
+      "amount": 149.99,
+      "status": "success",
+      "metadata": {
+        "attempt": 4,
+        "settlement_reference": "set-99102"
+      }
+    }
+  ]
+}
