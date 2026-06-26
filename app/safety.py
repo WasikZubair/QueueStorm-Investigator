@@ -21,7 +21,11 @@ def safety_reminder(language: str | None = None) -> str:
     return "Please do not share your PIN or OTP with anyone."
 
 
-def sanitize_text(text: str, language: str | None = None) -> str:
+def sanitize_text(
+    text: str,
+    language: str | None = None,
+    append_official_channel: bool = False,
+) -> str:
     safe_text = text
     for pattern in UNSAFE_PATTERNS:
         safe_text = re.sub(
@@ -31,7 +35,11 @@ def sanitize_text(text: str, language: str | None = None) -> str:
             flags=re.IGNORECASE,
         )
 
-    if "official support channels" not in safe_text.lower() and language != "bn":
+    if (
+        append_official_channel
+        and "official support channels" not in safe_text.lower()
+        and language != "bn"
+    ):
         safe_text = safe_text.rstrip() + " We will contact you through official support channels."
 
     return safe_text
@@ -45,7 +53,7 @@ def sanitize_response_texts(
 ) -> tuple[str, str, str]:
     agent_summary = sanitize_text(agent_summary, language)
     recommended_next_action = sanitize_text(recommended_next_action, language)
-    customer_reply = sanitize_text(customer_reply, language)
+    customer_reply = sanitize_text(customer_reply, language, append_official_channel=True)
 
     reminder = safety_reminder(language)
     if language == "bn":

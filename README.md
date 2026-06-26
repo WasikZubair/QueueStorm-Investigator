@@ -153,6 +153,10 @@ The test suite covers:
 - Safety guardrails.
 - 15 hidden-style local cases, including malformed input, empty complaint, Bangla/Banglish complaints, prompt injection, ambiguous matches, and duplicate payments.
 
+## MODELS
+
+No external AI or LLM model is used in Phase 2. The service runs a local deterministic Python rule engine for classification, transaction matching, evidence verdicts, routing, severity, and safe response generation. This keeps local execution simple, avoids API keys, and avoids runtime model cost.
+
 ## Sample Output
 
 Generated outputs from the current backend are stored in:
