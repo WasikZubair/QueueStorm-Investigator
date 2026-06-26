@@ -31,6 +31,17 @@ async def generic_exception_handler(request: Request, exc: Exception) -> JSONRes
     )
 
 
+@app.get("/")
+def root() -> dict[str, str]:
+    return {
+        "service": "QueueStorm Investigator API",
+        "status": "running",
+        "health": "/health",
+        "docs": "/docs",
+        "analyze_ticket": "/analyze-ticket",
+    }
+
+
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}

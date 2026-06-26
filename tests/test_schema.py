@@ -85,6 +85,18 @@ def test_health_returns_exact_status() -> None:
     assert response.json() == {"status": "ok"}
 
 
+def test_root_landing_endpoint() -> None:
+    response = client.get("/")
+    body = response.json()
+
+    assert response.status_code == 200
+    assert body["service"] == "QueueStorm Investigator API"
+    assert body["status"] == "running"
+    assert body["health"] == "/health"
+    assert body["docs"] == "/docs"
+    assert body["analyze_ticket"] == "/analyze-ticket"
+
+
 def test_analyze_ticket_response_schema_with_minimal_input() -> None:
     payload = {
         "ticket_id": "TKT-MIN",
